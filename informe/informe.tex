@@ -1,0 +1,80 @@
+% Informe del proyecto. Compilar desde esta carpeta: latexmk -pdf informe.tex
+% Las cifras y tablas se leen de ../output/tablas (las genera main.py).
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,booktabs,graphicx,float,caption,enumitem,fancyhdr,microtype}
+\usepackage[hidelinks]{hyperref}
+\graphicspath{{../output/figuras/}}
+
+% Textos en español (sin depender del paquete babel-spanish)
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabla}
+\renewcommand{\contentsname}{Contenido}
+\renewcommand{\refname}{Referencias}
+\hyphenpenalty=10000 \exhyphenpenalty=10000 \emergencystretch=3em
+\setlength{\parskip}{0.6em} \setlength{\parindent}{0pt}
+\captionsetup{font=small,labelfont=bf}
+\newcommand{\fuente}[1]{\par\vspace{2pt}{\footnotesize Fuente: #1}}
+\pagestyle{fancy} \fancyhf{}
+\fancyhead[L]{\small Efecto de los swaps de tasas extranjeras en los fondos de pensiones}
+\fancyhead[R]{\small AFP Capital, Fondo E}
+\fancyfoot[C]{\thepage}
+
+\input{../output/tablas/m1_macros.tex}
+\input{../output/tablas/m2_macros.tex}
+\input{../output/tablas/m3_macros.tex}
+\usepackage{xcolor}
+\newcommand{\pendiente}[1]{\textcolor{red}{[#1]}}
+% \input expandible, para usarlo dentro de tablas
+\makeatletter\newcommand{\tabla}[1]{\@@input ../output/tablas/#1 }\makeatother
+
+\begin{document}
+
+% ------------------------------------------------------------------ Portada
+\begin{titlepage}
+\centering
+{\large Pontificia Universidad Católica de Chile\par Instituto de Economía\par}
+\vspace{0.4cm}
+{\large Mercados Financieros (EAE3301)\par Profesor: Jaime Casassus\par}
+\vspace{3.5cm}
+{\LARGE\bfseries Efecto de los swaps de tasas extranjeras en los fondos de pensiones\par}
+\vspace{1.2cm}
+{\Large AFP asignada: \textbf{AFP Capital}\par Fondo analizado: \textbf{Fondo E}\par}
+\vspace{3.5cm}
+{\large Integrantes\par}
+\vspace{0.3cm}
+{\large Diego Cuadra\par Ricardo Hüe\par María Jesus Bobenrieth\par}
+\vfill
+{\large 29 de noviembre de 2026\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ------------------------------------------------------------- Introducción
+\section{Introducción}
+
+Entre enero y septiembre de 2026 el Fondo E del sistema de pensiones acumuló una
+rentabilidad real promedio de $-10{,}39\%$, un resultado inusual para el fondo más
+conservador y especialmente sensible para los afiliados próximos a jubilarse. El debate
+público ha apuntado a las posiciones en swaps de tasas de interés en dólares que
+mantenían los fondos y a los cambios regulatorios aplicados a estos instrumentos.
+
+Este informe estudia el caso del Fondo E de AFP Capital. El trabajo se organiza en tres
+módulos. En el primero se estima la estructura de tasas de interés en dólares que se
+usará para valorizar los swaps. En el segundo se reconstruyen las posiciones en swaps
+del fondo a partir de las carteras publicadas por la Superintendencia de Pensiones y de
+los agregados del SIID. En el tercero se analizan esas posiciones a la luz de la
+regulación, se mide su exposición al riesgo de tasas y se estima su contribución al
+desempeño del fondo durante 2026, para terminar con una evaluación de sus consecuencias
+para los afiliados.
+
+Todos los cálculos, tablas y gráficos se generan con código reproducible; las fuentes,
+las fechas de descarga y los supuestos se indican en cada sección y en los anexos.
+
+
+
+\end{document}
