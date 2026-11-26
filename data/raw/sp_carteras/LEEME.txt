@@ -1,0 +1,14 @@
+CARTERAS HISTÓRICAS DE INVERSIÓN (Superintendencia de Pensiones) - DESCARGA MANUAL
+
+El formulario de la SP está protegido con reCAPTCHA, así que estos archivos se
+bajan a mano desde el navegador:
+
+1. Abrir https://www.spensiones.cl/portal/institucional/594/w3-propertyname-621.html
+   y entrar a "Estadísticas y bases de datos" > "Acceso a bases de datos".
+   (El enlace directo a esa página da error 404 si no se llega desde el menú.)
+2. Desplegar con (+) "Carteras históricas de Inversión de los Fondos de Pensiones".
+3. Marcar "Archivos de Carteras Históricas de Inversión de los Fondos de Pensiones
+   (Desde 2016 a la fecha)" y pulsar "Descargar Archivo" (unos 115 MB).
+4. Marcar "Documentación archivos de Carteras Históricas de Inversión de los
+   Fondos de Pensiones" y pulsar "Descargar Archivo".
+5. Mover ambos archivos a esta carpeta, sin descomprimirlos ni cambiarles el nombre.
