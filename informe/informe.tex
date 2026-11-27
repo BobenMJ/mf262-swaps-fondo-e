@@ -500,4 +500,343 @@ causalidad: en esos mismos meses las tasas en dólares subieron y el patrimonio 
 fondo cayó, lo que también pudo incidir. Segundo, de julio en adelante la composición
 proviene del supuesto de proporcionalidad, que en este período es especialmente débil
 (sección anterior).
+
+\subsection{PV01 de la cartera base (pregunta 17)}
+
+El PV01 es el cambio en el valor de una posición cuando la tasa sube un punto base. Se
+calculó para cada contrato de la cartera de \MIIbase, valorizándolo con la curva del
+módulo I y con esa misma curva desplazada un punto base en paralelo, y se agregó por
+año de madurez (Tabla~\ref{tab:pv} y Figura~\ref{fig:pv}).
+
+\textbf{Valorización.} Un swap en que el fondo recibe tasa fija equivale a comprar un
+bono de tasa fija y vender uno de tasa flotante por el mismo nocional. El bono flotante
+vale par, de modo que el valor del swap por dólar de nocional es el precio del bono
+fijo menos uno, con signo contrario si el fondo paga fija. Los supuestos son:
+
+\begin{itemize}[leftmargin=*]
+\item Pata fija: cupón anual con base ACT/360 (tasa pactada por 365/360), pagado en los
+aniversarios del vencimiento. Los contratos de hasta un año pagan intereses una sola
+vez, al vencimiento. Las carteras no informan la frecuencia de pago; se adopta la
+convención habitual de los swaps SOFR en dólares.
+\item Pata flotante: SOFR sin \emph{spread}; se supone que vale par en cada fecha de
+valorización.
+\item Descuento: todos los flujos de un contrato se descuentan a la tasa par de la
+curva de Nelson y Siegel correspondiente a su plazo residual, llevada a composición
+anual.
+\item Se usan precios limpios, sin interés devengado.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{PV01 por año de madurez, cartera de \MIIbase}
+\label{tab:pv}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+ & Nocional neto & \multicolumn{3}{c}{PV01 (miles de USD por $+1$ pb)} \\
+\cmidrule(lr){3-5}
+Año de madurez & (MM USD) & Compra fija & Venta fija & Neto \\
+\midrule
+\tabla{p17_pv01.tex}
+\bottomrule
+\end{tabular}
+\fuente{elaboración propia. Valores negativos: el fondo pierde si las tasas suben.}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{p17_pv01.png}
+\caption{PV01 por año de madurez y sentido de la operación}
+\label{fig:pv}
+\fuente{elaboración propia.}
+\end{figure}
+
+El PV01 total es de \MIIIpv{} mil dólares: por cada punto base que sube la curva, el
+fondo pierde cerca de \MIIIpvAbs{} millones de dólares. La compra fija aporta
+\MIIIpvCompra{} mil y la venta fija solo compensa \MIIIpvVenta{} mil, pese a que su
+nocional es la mitad del de la compra. La mayor parte de esa compensación proviene,
+además, de unos pocos contratos a 30 años y no de la venta fija corta: los 4.211
+millones que vencen en 2026 tienen un PV01 de apenas 59 mil dólares.
+
+\textbf{Por qué tasas al valor par.} La tasa fija de un swap que se inicia hoy es, por
+definición, la tasa par de ese plazo: la que hace que el bono fijo equivalente valga
+par y el swap valga cero. El valor de un swap ya existente depende entonces de la
+diferencia entre su tasa pactada y la tasa par vigente para su plazo residual, y su
+PV01 es la sensibilidad a esa tasa. Con una curva par se puede valorizar cada contrato
+directamente, sin estimar antes una curva cero cupón; además, las CMT del módulo I son
+tasas par, por lo que usarlas como tales evita una transformación adicional y su error.
+El costo es una aproximación: descontar todos los flujos a una misma tasa es exacto
+solo para un contrato a la par y se aleja a medida que la tasa pactada difiere de la de
+mercado.
+
+\textbf{Limitación: curva del Tesoro para swaps SOFR.} Los swaps se valorizan en el
+mercado con la curva de swaps SOFR, no con la del Tesoro. La diferencia entre ambas
+(\emph{swap spread}) no se modela aquí. En los plazos largos la tasa swap ha estado por
+debajo de la del Tesoro, de modo que este ejercicio descuenta a tasas algo mayores y
+\textbf{subestima el nivel} del valor de las posiciones que reciben fija: para junio de
+2026 el modelo entrega \MIIIvalorBase{} millones de dólares, frente a los
+\MIIIvalorBaseSP{} millones que suman los valores informados en la cartera. Los
+\emph{cambios} de valor, en cambio, son confiables mientras el \emph{spread} sea
+estable: la correlación entre el mark-to-market mensual del modelo y la variación del
+valor informado es de \MIIIcorrInformado. Si el \emph{spread} cambia, los resultados
+incorporan un error que no se puede cuantificar con estos datos.
+
+\subsection{Tipo de exposición (pregunta 18)}
+
+A través de los swaps el fondo está \textbf{comprado en duración en dólares}. Recibir
+fija a 5 o 10 años y pagar SOFR equivale, en términos de riesgo de tasas, a comprar un
+bono del Tesoro de ese plazo financiado a la tasa de un día: gana si las tasas largas
+bajan y pierde si suben, sin desembolsar el nocional. La venta fija funciona al revés,
+como vender un bono, pero al concentrarse en plazos de tres meses su duración es
+mínima.
+
+La magnitud se aprecia al expresar el PV01 como duración. Un bono de duración
+modificada $D$ y valor $P$ tiene un PV01 de $D \times P \times 0{,}0001$. El PV01 neto
+de los swaps equivale, sobre el patrimonio del fondo (\MIIpatBaseUsd{} miles de
+millones de dólares), a \textbf{\MIIIduracion{} años de duración adicional}. Dicho de
+otro modo, un alza paralela de 100 puntos base en la curva en dólares implica una
+pérdida cercana a \MIIIcienPb{} millones de dólares, un \MIIIcienPbPat{} del
+patrimonio. Como referencia, el límite LED del Fondo E es de 2\%, aunque se calcula con
+los escenarios de la norma y no con un alza de 100 puntos base.
+
+Por horizonte, la exposición se concentra en los vencimientos de 2029 a 2036, es decir,
+en el tramo de 3 a 10 años de la curva. En los vencimientos de 2055 y 2056 el fondo
+paga fija, lo que agrega una posición menor de signo contrario a 30 años: gana si la
+curva se empina entre 10 y 30 años.
+
+El razonamiento económico es el siguiente. El Fondo E invierte sobre todo en renta fija
+local, y los swaps le permiten agregar duración en otra curva sin vender activos ni
+usar caja. Con una curva en dólares de pendiente positiva, recibir fija larga y pagar
+flotante entrega además un devengo positivo mientras las tasas cortas no suban. A
+cambio, el fondo queda expuesto al nivel de las tasas largas de Estados Unidos, un
+riesgo ajeno a la inflación y las tasas chilenas que determinan el valor de una pensión
+en UF, y además apalancado: la exposición no está limitada por el monto invertido.
+
+\subsection{Mark-to-market mensual (pregunta 19)}
+
+Para cada mes entre febrero de 2024 y septiembre de 2026 se tomó la cartera del cierre
+anterior, sin operaciones nuevas ni ajustes, y se valorizó al inicio y al cierre del
+mes con la curva de cada fecha. Entre ambas fechas los contratos envejecen un mes: se
+usa el plazo residual que corresponde a cada valorización, y los que vencen dentro del
+mes terminan con valor cero. El mark-to-market es la diferencia entre ambos valores.
+
+Las convenciones son las de la pregunta 17. Al usar precios limpios, \textbf{el
+resultado excluye el \emph{carry}}, es decir, los intereses fijos y flotantes devengados
+o pagados en el mes. Es una limitación: la serie no mide el retorno total de los swaps,
+sino solo el efecto del movimiento de las tasas y del paso del tiempo sobre su valor.
+Tampoco incluye el resultado de las operaciones abiertas durante el mes.
+
+\textbf{Meses con posiciones estimadas.} Agosto y septiembre de 2026 usan como posición
+inicial las carteras estimadas de julio y agosto (pregunta 12). Julio usa la cartera
+observada de junio. En los meses estimados se mantienen las duraciones de la cartera
+base.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{p19_mtm.png}
+\caption{Mark-to-market mensual de los swaps SOFR y su suma acumulada, en millones de USD}
+\label{fig:mtm}
+\fuente{elaboración propia. Excluye intereses devengados (\emph{carry}). La serie completa está en \texttt{output/tablas/p19\_mtm\_mensual.csv}.}
+\end{figure}
+
+Los resultados principales (Figura~\ref{fig:mtm}) son tres. Primero, el tamaño de los
+movimientos crece con la posición: el PV01 al inicio de cada mes pasa de medio millón
+de dólares por punto base a comienzos de 2024 a unos cuatro millones en 2026. Segundo,
+hasta fines de 2025 las ganancias y pérdidas se alternan, siguiendo a las tasas en
+dólares, y el acumulado es moderado: \MIIImtmVeinticuatro{} millones en 2024 y
+\MIIImtmVeinticinco{} millones en 2025. Tercero, en 2026 el resultado es negativo en
+\MIIImesesNeg{} de los nueve meses y suma \MIIImtmVeintiseis{} millones de dólares. El
+peor mes es \MIIIpeorMes{} (\MIIIpeorUsd{} millones), cuando la curva en dólares sube
+con fuerza; ese mes usa posiciones estimadas. En todo el período el acumulado es de
+\MIIImtmTotal{} millones.
+
+\subsection{Contribución a la rentabilidad del fondo (pregunta 20)}
+
+La contribución aproximada de los swaps a la rentabilidad de cada mes de 2026 es
+\[
+r_t^{\text{swaps}} = \frac{\text{MTM}_t}{P_{t-1}},
+\]
+donde $P_{t-1}$ es el patrimonio al inicio del mes. El mark-to-market en dólares se
+convirtió a pesos con el tipo de cambio del cierre de cada mes, tomado de los ``Valores
+monetarios'' de la Superintendencia de Pensiones. El acumulado se calcula como
+$\prod_s (1 + r_s^{\text{swaps}}) - 1$. \textbf{La comparación es nominal}: la razón
+anterior, en pesos, es una contribución nominal, y se contrasta con la rentabilidad
+nominal del valor cuota de la pregunta 8.
+
+\begin{table}[H]
+\centering
+\caption{Contribución estimada de los swaps SOFR a la rentabilidad del Fondo E en 2026}
+\label{tab:contrib}
+\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+ & MTM & Dólar & MTM & Patrimonio & \multicolumn{2}{c}{Contribución swaps} & Fondo \\
+\cmidrule(lr){6-7}
+Mes & (MM USD) & (\$) & (MMM\$) & inicial (MMM\$) & Mensual & Acumulada & acumulado \\
+\midrule
+\tabla{p20_contribucion.tex}
+\bottomrule
+\end{tabular}
+\fuente{elaboración propia. * Meses cuya posición inicial es estimada. MMM\$: miles de millones de pesos. Fondo acumulado: rentabilidad nominal del valor cuota desde el 31-12-2025.}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{p20_contribucion.png}
+\caption{Rentabilidad nominal acumulada del Fondo E y contribución estimada de los swaps, 2026}
+\label{fig:contrib}
+\fuente{elaboración propia. ``Resto de la cartera'' es la diferencia compuesta entre ambas series, no una medición directa.}
+\end{figure}
+
+Entre enero y septiembre de 2026 la contribución acumulada de los swaps es de
+\MIIIswapsAcum, frente a una rentabilidad nominal del fondo de \MIIIfondoAcum{}
+(Tabla~\ref{tab:contrib} y Figura~\ref{fig:contrib}). Es decir, la pérdida estimada de
+los swaps es mayor que la caída total del valor cuota, lo que implica que el resto de
+la cartera habría rentado alrededor de \MIIIrestoAcum{} en el período. Ambas series se
+mueven juntas (correlación mensual de \MIIIcorrVeinte) y el peor mes del fondo,
+septiembre, coincide con el peor mes de los swaps.
+
+\textbf{Esta comparación no es una descomposición completa de la rentabilidad.} La
+diferencia atribuida al ``resto de la cartera'' agrupa determinantes que no se
+midieron:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Tasas locales y renta fija nacional.} Es la principal inversión del Fondo
+E; sus cambios de valor y su devengo pesan más que cualquier otro factor en un año
+normal.
+\item \textbf{UF.} La UF subió \MIIuf{} en el período, lo que eleva el retorno nominal de
+los instrumentos reajustables.
+\item \textbf{Tipo de cambio.} Afecta a las inversiones en el exterior no cubiertas y a
+los otros derivados del fondo.
+\item \textbf{El \emph{carry} de los swaps y las operaciones del mes}, excluidos por
+construcción, además de comisiones y flujos de aportes y retiros.
+\end{itemize}
+
+A ello se suman los errores propios de la estimación: la curva del Tesoro en lugar de
+la curva swap, el peor ajuste de Nelson y Siegel en septiembre de 2026 y el uso de
+posiciones estimadas en agosto y septiembre, que concentran cerca de la mitad de la
+pérdida del año. La cifra debe leerse como un orden de magnitud: los swaps explican una
+parte muy importante de la caída del fondo, probablemente la mayor, pero la evidencia
+no permite afirmar que la expliquen por completo ni con esa precisión.
+
+\subsection{Evaluación (pregunta 21)}
+
+
+\textbf{Efecto sobre el desempeño.} La evidencia indica que las posiciones en swaps
+fueron el principal determinante identificable de la caída del Fondo E de AFP Capital
+en 2026. Su contribución estimada, de \MIIIswapsAcum, es del mismo orden que la
+rentabilidad nominal del fondo (\MIIIfondoAcum) y sigue su perfil mensual. El mecanismo
+es simple y consistente en todos los módulos: el fondo recibía tasa fija a plazos de 3
+a 10 años por un nocional cercano al doble de su patrimonio, y entre diciembre de 2025
+y septiembre de 2026 la tasa par a 10 años subió cerca de \MIIIdifDiez{} puntos base
+según la curva estimada.
+
+\textbf{Efecto sobre el riesgo.} Más relevante que el resultado de un año es el riesgo
+asumido. Un PV01 equivalente a \MIIIduracion{} años de duración adicional, en la curva
+de otro país, no es coherente con el perfil del fondo más conservador del sistema, y
+era invisible para una regulación basada en el nocional neto. El resultado de 2026 no
+fue un accidente improbable, sino la consecuencia esperable de esa exposición ante un
+alza de tasas. Tampoco debe juzgarse solo por el desenlace: en 2025 la misma posición
+aportó ganancias (\MIIImtmVeinticinco{} millones de dólares de mark-to-market, además
+del \emph{carry}), y habría seguido aportándolas si las tasas hubieran bajado.
+
+\textbf{Limitaciones.} Las conclusiones descansan en aproximaciones: una curva del
+Tesoro en lugar de la curva swap, convenciones de pago supuestas, exclusión del
+\emph{carry}, posiciones estimadas desde julio y la ausencia de una descomposición
+completa de la rentabilidad. Ninguna cambia el signo ni el orden de magnitud, pero sí
+impiden afirmar una cifra exacta.
+
+\textbf{Consecuencias para un afiliado próximo a jubilarse por retiro programado.} En
+el retiro programado la pensión se calcula dividiendo el saldo de la cuenta por el
+capital necesario para financiar una unidad de pensión, y se recalcula cada año. Por
+eso el perjuicio no es solo una pérdida transitoria de valor cuota: quien se pensiona
+con el saldo disminuido convierte la pérdida en una pensión inicial menor, en la misma
+proporción. Con la contribución estimada, un afiliado que mantuvo todo su saldo en este
+fondo durante 2026 tendría un saldo cerca de 10\% menor que sin los swaps y, a igual
+capital necesario, una primera pensión menor en esa misma proporción.
+
+Para evaluar y cuantificar el perjuicio o beneficio se necesitaría:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Un criterio de comparación explícito.} El escenario contrafactual natural
+es el mismo fondo sin las posiciones en swaps, pero también cabe comparar con el
+promedio del sistema o con una cartera de referencia de renta fija local. La elección
+cambia el resultado.
+\item \textbf{Un horizonte.} Medido solo en 2026, el efecto es una pérdida; medido
+desde que se abrieron las posiciones, hay que sumar las ganancias y el \emph{carry} de
+2024 y 2025 que ese mismo afiliado recibió. El perjuicio neto depende de cuándo entró
+al fondo.
+\item \textbf{Información del afiliado.} Saldo y fecha de pensión, permanencia en el
+fondo, y si ya retiró el saldo o seguirá expuesto: en retiro programado el saldo
+permanece invertido, por lo que una recuperación posterior de las tasas revertiría
+parte de la pérdida en los recálculos siguientes, siempre que las posiciones no se
+hayan cerrado antes, cristalizando la pérdida.
+\item \textbf{Parámetros de la pensión.} La tasa de interés técnica y las tablas de
+mortalidad vigentes, porque determinan el capital necesario: si las tasas locales de
+largo plazo cambian, la pensión varía aunque el saldo sea el mismo.
+\item \textbf{Una valorización completa de los swaps}, con curva swap, flujos reales y
+\emph{carry}, y con las posiciones efectivas de julio a septiembre.
+\end{itemize}
+
+Con ello, la cuantificación consistiría en reconstruir el valor cuota contrafactual del
+fondo, aplicar su trayectoria al saldo del afiliado y recalcular su pensión en la fecha
+en que se pensiona, comparándola con la efectiva. A nuestro juicio, el criterio
+adecuado para un afiliado próximo a jubilarse no es solo el resultado, sino si el
+riesgo tomado era consistente con lo que razonablemente podía esperar del Fondo E.
+
+
+\subsection{Autorización (pregunta 22)}
+Los estudiantes de este grupo no autorizamos a que este informe sea compartido.
+
+% ------------------------------------------------------------------ Anexos
+\appendix
+\section{Supuestos y aproximaciones}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Curvas.} Curva par de Nelson y Siegel sobre las CMT, con $\tau$ único y
+$\beta$ mensuales; movimientos paralelos de un punto base para el PV01.
+\item \textbf{Contratos.} Cupón fijo anual ACT/360, pago único en contratos de hasta un
+año, pata flotante a la par, precios limpios; no se modela el \emph{swap spread}.
+\item \textbf{Posiciones.} Carteras observadas hasta junio de 2026; julio a septiembre
+estimados con los agregados del SIID y la composición de junio.
+\item \textbf{Fechas.} Las carteras y las curvas corresponden al último día hábil de
+cada mes; los meses estimados se fechan al último día del mes.
+\item \textbf{Aproximaciones de primer orden.} La duración equivalente y la pérdida
+ante 100 puntos base se obtienen escalando el PV01, sin convexidad.
+\end{itemize}
+
+\section{Fuentes y fechas de descarga}
+
+Todos los datos se descargaron el 15 de noviembre de 2026; el detalle por archivo está
+en \texttt{data/raw/registro\_descargas.csv}.
+
+\begin{itemize}[leftmargin=*]
+\item FRED, Federal Reserve Bank of St.\ Louis: tasas CMT (series DGS).
+\item Federal Reserve Board: curva de Gürkaynak, Sack y Wright (\texttt{feds200628.csv}).
+\item Superintendencia de Pensiones: valores cuota y patrimonio; valores monetarios (UF
+y dólar); carteras históricas de inversión (cartera base: junio de 2026).
+\item Banco Central de Chile, SIID y Base de Datos Estadísticos: cuadros
+DER\_RES\_POS\_02 y DER\_TAS\_FP\_STO\_01.
+\item Superintendencia de Pensiones: comunicado del 9 de abril de 2026 sobre la
+Resolución Exenta N.º 549 y la NCG N.º 362; Compendio de Normas del Sistema de
+Pensiones, Libro IV, Título I, Letra A, Capítulo III (consultados el 15-11-2026).
+\end{itemize}
+
+\section{Código y datos}
+
+El trabajo se realizó en Python (pandas, numpy y matplotlib) y el informe en LaTeX. El
+código y los datos necesarios para reproducirlo están en: \url{https://github.com/diegocuadra-web/swaps-fondo-e-mf}. Con \texttt{python main.py} se regeneran
+todas las tablas y gráficos sin conexión a internet.
+
+\section{Uso de inteligencia artificial}
+
+Se utilizó Claude (Anthropic, modelo Claude Fable 5.2) en tres tareas: programación (descarga y lectura de datos, estimación,
+valorización, tablas y gráficos), análisis (identificación de fuentes y formatos,
+revisión de resultados) y redacción de borradores de este informe. Los resultados se
+verificaron de las siguientes formas: contraste de los formatos y valores de muestra
+con los sitios de origen; pruebas de las funciones de lectura y de valorización con
+casos de resultado conocido; comparación de la curva estimada con la de la Reserva
+Federal; comparación de la suma de las carteras de todas las AFP con el agregado del
+SIID; y comparación del valor de los swaps del modelo con el informado en las carteras.
+El registro detallado está en \texttt{docs/bitacora\_ia.md}.
 \end{document}
