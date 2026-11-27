@@ -407,5 +407,97 @@ El fondo opera con \MIIcontrapartes{} contrapartes (Tabla~\ref{tab:contrapartes}
 
 La cartera presenta una concentración elevada. La contraparte de mayor tamaño reúne el \MIItopUno{} del nocional bruto; las tres principales concentran el \MIItopTres{} y las cinco primeras, el \MIItopCinco{}. El índice Herfindahl-Hirschman, calculado sobre el nocional bruto, es de \MIIhhi{} puntos, cifra que suele asociarse a una concentración entre moderada y alta. De todos modos, el nocional bruto no mide directamente el riesgo de crédito con cada contraparte, pues este depende del valor de mercado de los contratos y de las garantías intercambiadas.
 
+% -------------------------------------------------------------- Módulo III
+\section{Módulo III: análisis de las posiciones en swaps}
 
+\subsection{Regulación aplicable (pregunta 15)}
+
+\textbf{Normativa vigente.} El 9 de abril de 2026 la Superintendencia de Pensiones
+emitió la Resolución Exenta N.º 549, que modifica el Régimen de Inversión de los Fondos
+de Pensiones, y la Norma de Carácter General N.º 362, que modifica el Título I del
+Libro IV del Compendio de Normas y contiene las instrucciones y plazos para
+implementarla. Según la Superintendencia, el objetivo es que el riesgo asumido mediante
+derivados ``se mantenga dentro de márgenes prudentes y proporcionales al tamaño de cada
+Fondo'' y asegurar recursos líquidos suficientes frente a eventuales requerimientos de
+garantías. Sus disposiciones principales son cuatro.
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Límite de máxima exposición en derivados (LED).} Es la pérdida estimada de
+la cartera de derivados bajo condiciones de estrés (exposición máxima esperada, EME),
+como porcentaje de los activos del fondo. No puede superar 3\% en los Fondos A y B,
+2,5\% en el C y \textbf{2\% en los Fondos D y E}, y se controla diariamente. Excluye los
+derivados de cobertura de moneda.
+\item \textbf{Medición del riesgo.} La EME se calcula con un método estándar
+simplificado que suma la pérdida por riesgo de tasas y por riesgo de moneda. La de
+tasas parte del valor por punto base (VPB) de cada derivado, es decir, su sensibilidad
+a un cambio de un punto base en la tasa, y le aplica seis escenarios de perturbación de
+la curva según el plazo remanente: alza y baja paralelas, aumento y reducción de
+pendiente, y alza y baja de las tasas cortas. Se computa el escenario más adverso.
+\item \textbf{Razón de cobertura de liquidez (RCL).} Los activos líquidos de alta
+disponibilidad deben cubrir al menos el 100\% de los requerimientos potenciales de
+liquidez de los derivados (exposición actual más una reserva de riesgo), por separado
+para el grupo de monedas locales y el de monedas extranjeras, también con control
+diario.
+\item \textbf{Riesgo de contraparte.} Las operaciones nuevas deben contar con acuerdos
+bilaterales de manejo de colaterales (por ejemplo, del tipo CSA) o compensarse en
+entidades de contraparte central reconocidas.
+\end{itemize}
+
+Las AFP tienen 210 días corridos para ajustarse a los límites LED y RCL, es decir,
+hasta comienzos de noviembre de 2026; transcurridos 120 días (comienzos de agosto), los
+excesos no pueden superar el 40\% de los márgenes máximos.
+
+\textbf{Cambios respecto de la regulación anterior.} Antes, los derivados de inversión
+se controlaban por su \emph{nocional neto}: la posición neta en un activo objeto,
+computada dentro de un límite de 3\% del fondo. La norma definía los términos netos
+como la diferencia entre lo comprado y lo vendido a futuro de un mismo activo objeto,
+``sin importar las fechas de vencimiento''. El cambio central es, entonces, pasar de
+medir \textbf{cuánto nocional neto} hay a medir \textbf{cuánto puede perder} la cartera
+ante movimientos de la curva.
+
+\textbf{Implicancias para los swaps de tasas.} Con la regla anterior, una compra fija a
+10 años y una venta fija a 3 meses por el mismo nocional se compensaban por completo,
+aunque la primera es decenas de veces más sensible a las tasas que la segunda. Esa es
+exactamente la estructura que muestra el Fondo E de AFP Capital hasta marzo de 2026
+(Figura~\ref{fig:tramos}): un nocional neto cercano a cero con una exposición a tasas
+muy grande. Con la nueva regla, lo que cuenta es el VPB, que no se compensa entre
+plazos tan distintos. La venta fija de corto plazo deja de servir para cumplir el
+límite, y la única forma de reducir la exposición medida es disminuir o compensar la
+compra fija de largo plazo con posiciones de sensibilidad similar.
+
+\subsection{El quiebre de abril de 2026 (pregunta 16)}
+
+El quiebre se identifica con claridad en la Figura~\ref{fig:tramos} y en la
+Tabla~\ref{tab:totales}. Con datos \textbf{observados en las carteras}: la venta fija
+del fondo, que venía creciendo a la par de la compra, cae de \MIIventaAbr{} millones de
+dólares en abril a \MIIventaBase{} millones en junio; la compra fija, en cambio, se
+mantiene; y el neto pasa de \MIInetoMar{} millones en marzo a \MIInetoBase{} millones
+en junio. Con datos \textbf{estimados mediante el SIID} (julio a septiembre), la venta
+fija seguiría bajando hasta \MIIventaFin{} millones y el neto llegaría a \MIInetoFin{}
+millones. El agregado del sistema muestra el mismo patrón
+(Figura~\ref{fig:siidswaps}).
+
+La relación con la norma es directa:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{La venta fija corta pierde su función.} Bajo la regla del nocional neto,
+esas posiciones permitían mantener la compra fija larga dentro del límite. Como el LED
+mide pérdidas en estrés y no nocionales, renovarlas cada tres meses ya no aporta al
+cumplimiento, y simplemente se dejan vencer. Por su corto plazo, el ajuste es rápido y
+no requiere deshacer contratos.
+\item \textbf{La compra fija larga no se reduce.} Deshacerla anticipadamente obliga a
+realizar su valor de mercado, que ya era negativo, y a pagar costos de término. El
+plazo de adecuación de 210 días, con un hito intermedio a los 120, da margen para
+postergar ese ajuste, que por lo mismo no alcanza a observarse en las carteras
+publicadas (hasta junio).
+\item \textbf{El neto nocional sube, pero el riesgo casi no cambia.} El salto del neto
+no refleja una apuesta nueva: la exposición a tasas ya estaba en la compra fija larga.
+Lo que desaparece es el lado que la hacía invisible para el límite anterior.
+\end{itemize}
+
+Dos advertencias. Primero, la interpretación es coherente con los datos, pero no prueba
+causalidad: en esos mismos meses las tasas en dólares subieron y el patrimonio del
+fondo cayó, lo que también pudo incidir. Segundo, de julio en adelante la composición
+proviene del supuesto de proporcionalidad, que en este período es especialmente débil
+(sección anterior).
 \end{document}
