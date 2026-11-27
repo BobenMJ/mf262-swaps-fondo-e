@@ -1,0 +1,29 @@
+name: Compilar informe
+
+on:
+  push:
+    paths:
+      - "informe/informe.tex"
+      - "output/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compilar LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: informe.tex
+          working_directory: informe
+
+      - name: Subir el PDF
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "PDF del informe actualizado"
+          file_pattern: informe/informe.pdf
